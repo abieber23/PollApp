@@ -1,0 +1,33 @@
+<div class="home">
+  <app-navbar (createSurvey)="showCreateModal.set(true)" />
+
+  <app-hero (newSurvey)="showCreateModal.set(true)" />
+
+  <div class="home__surveys">
+    <h1 class="home__section-title">Your surveys</h1>
+
+    @if (loading()) {
+      <div class="home__loading">Loading surveys…</div>
+    } @else {
+      <app-ending-soon
+        [polls]="endingSoonPolls()"
+        (pollSelected)="navigateToPoll($event)"
+        (pollDelete)="deletePoll($event)"
+      />
+
+      <app-survey-list
+        [activePolls]="activePolls()"
+        [pastPolls]="pastPolls()"
+        (pollSelected)="navigateToPoll($event)"
+        (pollDelete)="deletePoll($event)"
+      />
+    }
+  </div>
+
+  @if (showCreateModal()) {
+    <app-create-survey-modal
+      (closed)="showCreateModal.set(false)"
+      (pollCreated)="onPollCreated($event)"
+    />
+  }
+</div>

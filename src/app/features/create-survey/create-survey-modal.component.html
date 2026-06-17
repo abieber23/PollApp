@@ -1,0 +1,129 @@
+<div class="modal-overlay" (click)="closed.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal__header">
+      <div>
+        <app-badge label="Draft" variant="draft" />
+        <h2 class="modal__title">Create new survey</h2>
+      </div>
+      <button class="modal__close" (click)="closed.emit()" aria-label="Close">Cancel ×</button>
+    </div>
+
+    <div class="modal__body">
+      <!-- Left column -->
+      <div class="modal__left">
+        <div class="modal__field">
+          <label class="modal__label">Survey name <span class="modal__required">*</span></label>
+          <input
+            class="modal__input"
+            type="text"
+            [value]="title()"
+            (input)="title.set($any($event.target).value)"
+            placeholder="Enter survey title"
+          />
+        </div>
+
+        <div class="modal__row">
+          <div class="modal__field">
+            <label class="modal__label">Set end date <span class="modal__optional">(optional)</span></label>
+            <input
+              class="modal__input"
+              type="date"
+              [value]="deadline()"
+              (input)="deadline.set($any($event.target).value)"
+            />
+          </div>
+          <div class="modal__field">
+            <label class="modal__label">Choose category</label>
+            <input
+              class="modal__input"
+              type="text"
+              [value]="category()"
+              (input)="category.set($any($event.target).value)"
+              placeholder="e.g. Team activities"
+            />
+          </div>
+        </div>
+
+        <!-- Questions -->
+        @for (question of questions(); track $index; let i = $index) {
+          <div class="modal__question">
+            <div class="modal__question-header">
+              <label class="modal__label">{{ i + 1 }}. Question <span class="modal__required">*</span></label>
+              @if (questions().length > 1) {
+                <button class="modal__icon-btn" (click)="removeQuestion(i)" title="Remove question">×</button>
+              }
+            </div>
+            <input
+              class="modal__input"
+              type="text"
+              [value]="question.text"
+              (input)="setQuestionText(i, $any($event.target).value)"
+              placeholder="Which date would work best for you?"
+            />
+
+            <div class="modal__answers-header">
+              <span class="modal__label">Answers</span>
+              <label class="modal__checkbox-label">
+                <input
+                  type="checkbox"
+                  [checked]="question.allow_multiple"
+                  (change)="toggleMultiple(i)"
+                />
+                Allow multiple answers
+              </label>
+            </div>
+
+            @for (option of question.options; track $index; let j = $index) {
+              <div class="modal__option-row">
+                <span class="modal__option-letter">{{ optionLetter(j) }}.</span>
+                <input
+                  class="modal__input modal__input--option"
+                  type="text"
+                  [value]="option"
+                  (input)="setOptionText(i, j, $any($event.target).value)"
+                />
+                @if (question.options.length > 2) {
+                  <button class="modal__icon-btn" (click)="removeOption(i, j)" title="Remove option">×</button>
+                }
+              </div>
+            }
+
+            <button class="modal__add-btn" (click)="addOption(i)">+ Add answer</button>
+          </div>
+        }
+
+        <button class="modal__add-question-btn" (click)="addQuestion()">
+          Add next question ⊕
+        </button>
+      </div>
+
+      <!-- Right column -->
+      <div class="modal__right">
+        <div class="modal__field">
+          <label class="modal__label">Describing text <span class="modal__optional">(optional)</span></label>
+          <textarea
+            class="modal__input modal__textarea"
+            [value]="description()"
+            (input)="description.set($any($event.target).value)"
+            placeholder="Describe your survey…"
+            rows="6"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    @if (error()) {
+      <p class="modal__error">{{ error() }}</p>
+    }
+
+    <div class="modal__footer">
+      <button
+        class="modal__publish-btn"
+        [disabled]="!isValid || submitting()"
+        (click)="publish()"
+      >
+        {{ submitting() ? 'Publishing…' : 'Publish' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  &__logo {
+    height: 40px;
+    width: auto;
+  }
+
+  &__cta {
+    @include button-primary;
+    font-size: 13px;
+    padding: 8px 18px;
+  }
+}

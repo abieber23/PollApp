@@ -1,0 +1,20 @@
+<div class="survey-card survey-card--{{ variant() }}" (click)="cardClick.emit(poll())">
+  @if (showDelete()) {
+    <button
+      class="survey-card__delete"
+      (click)="$event.stopPropagation(); deleteClick.emit(poll().id)"
+      title="Umfrage löschen"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  }
+  @if (poll().category) {
+    <span class="survey-card__category">{{ poll().category }}</span>
+  }
+  <h3 class="survey-card__title">{{ poll().title }}</h3>
+  @if (deadlineLabel()) {
+    <app-badge [label]="deadlineLabel()!" [variant]="deadlineBadgeVariant()" />
+  }
+</div>

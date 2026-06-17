@@ -1,0 +1,35 @@
+@use 'variables' as *;
+
+.ending-soon {
+  padding: 0 24px 32px;
+
+  &__title {
+    font-size: 17px;
+    font-weight: 600;
+    color: $text-on-dark;
+    margin: 0 0 16px;
+  }
+
+  &__scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+
+    &::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+    }
+  }
+
+  &__item {
+    flex-shrink: 0;
+    width: 300px;
+  }
+}

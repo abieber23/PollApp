@@ -1,0 +1,24 @@
+<div class="survey-results">
+  <h2 class="survey-results__title">
+    Survey results
+    <span class="survey-results__live">LIVE</span>
+  </h2>
+
+  @for (question of poll().questions ?? []; track question.id; let i = $index) {
+    <div class="survey-results__question">
+      <h4 class="survey-results__question-title">{{ i + 1 }}. {{ question.text }}</h4>
+
+      <div class="survey-results__bars">
+        @for (option of question.options ?? []; track option.id; let j = $index) {
+          <div class="survey-results__row">
+            <span class="survey-results__letter">{{ optionLetter(j) }}</span>
+            <div class="survey-results__bar">
+              <app-progress-bar [percentage]="percentage(option.id, question.id)" />
+            </div>
+            <span class="survey-results__pct">{{ percentage(option.id, question.id) }}%</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

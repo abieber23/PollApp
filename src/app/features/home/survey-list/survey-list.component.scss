@@ -1,0 +1,64 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.survey-list {
+  padding: 0 24px 48px;
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__tab {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: $text-muted-dark;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &--active {
+      background: $accent;
+      color: #1a1a2e;
+      font-weight: 600;
+    }
+
+    &:not(&--active):hover {
+      border-color: $border-dark;
+      color: $text-on-dark;
+    }
+  }
+
+  &__select {
+    @include input-dark;
+    width: auto;
+    padding-right: 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  &__empty {
+    color: $text-muted-dark;
+    text-align: center;
+    padding: $space-xxl 0;
+    font-size: 15px;
+  }
+}

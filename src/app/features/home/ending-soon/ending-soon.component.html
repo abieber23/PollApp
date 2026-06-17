@@ -1,0 +1,16 @@
+@if (polls().length > 0) {
+  <section class="ending-soon">
+    <h3 class="ending-soon__title">Ending soon surveys</h3>
+    <div class="ending-soon__scroll">
+      @for (poll of polls(); track poll.id) {
+        <app-survey-card
+          class="ending-soon__item"
+          [poll]="poll"
+          variant="ending-soon-card"
+          (cardClick)="pollSelected.emit($event)"
+          (deleteClick)="pollDelete.emit($event)"
+        />
+      }
+    </div>
+  </section>
+}

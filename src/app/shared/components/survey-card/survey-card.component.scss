@@ -1,0 +1,137 @@
+@use 'variables' as *;
+
+.survey-card {
+  padding: $space-lg;
+  border-radius: $radius-md;
+  cursor: pointer;
+  position: relative;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &__delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: $text-muted-dark;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background: rgba($error, 0.2);
+      color: $error;
+    }
+  }
+
+  &:hover &__delete {
+    opacity: 1;
+  }
+
+  &__category {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  // ── Dark variant (used on home page) ──────────────
+  &--dark {
+    background: $surface-dark;
+    border: 1px solid $border-dark;
+
+    &:hover {
+      box-shadow: $shadow-md;
+      background: $surface-dark-hover;
+    }
+
+    .survey-card__category {
+      color: $text-muted-dark;
+    }
+
+    .survey-card__title {
+      color: $text-on-dark;
+    }
+  }
+
+  // ── Ending-soon card (light lavender, big top-right radius) ──
+  &--ending-soon-card {
+    background: #ede9f5;
+    border: none;
+    border-radius: 12px 80px 12px 12px;
+    min-height: 240px;
+    justify-content: space-between;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(52, 39, 57, 0.18);
+    }
+
+    .survey-card__delete {
+      color: #8877a0;
+
+      &:hover {
+        background: rgba($error, 0.12);
+        color: $error;
+      }
+    }
+
+    .survey-card__category {
+      color: #9080a8;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .survey-card__title {
+      color: $text-on-light;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+  }
+
+  // ── List variant (compact, for light pages) ───────
+  &--list {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid $border-dark;
+    padding: $space-md $space-lg;
+
+    &:hover {
+      box-shadow: $shadow-sm;
+      border-color: rgba($accent, 0.4);
+    }
+
+    .survey-card__category {
+      color: $text-muted-dark;
+    }
+
+    .survey-card__title {
+      color: $text-on-dark;
+      font-size: 15px;
+    }
+  }
+}

@@ -1,0 +1,80 @@
+@use 'variables' as *;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin button-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: $accent;
+  color: $text-on-light;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+
+  &:hover:not(:disabled) {
+    background: $accent-hover;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: transparent;
+  color: $text-on-dark;
+  border: 1px solid $border-dark;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+
+  &:hover {
+    border-color: $accent;
+    background: rgba($accent, 0.08);
+  }
+}
+
+@mixin input-dark {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid $border-dark;
+  border-radius: $radius-sm;
+  color: $text-on-dark;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: $text-muted-dark;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $accent;
+  }
+}

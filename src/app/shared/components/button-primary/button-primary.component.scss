@@ -1,0 +1,53 @@
+@use 'variables' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: $accent;
+  color: $text-on-light;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-sans;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover:not(.btn--success) {
+    background: $accent-hover;
+
+    .btn__icon--plus {
+      opacity: 1;
+      width: 16px;
+      margin-left: 2px;
+    }
+  }
+
+  &--success {
+    cursor: default;
+
+    .btn__icon--check {
+      opacity: 1;
+      width: 16px;
+      margin-left: 2px;
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    overflow: hidden;
+    width: 0;
+    opacity: 0;
+    transition:
+      width 0.2s ease,
+      opacity 0.2s ease,
+      margin 0.2s ease;
+
+    &--check {
+      color: $text-on-light;
+    }
+  }
+}

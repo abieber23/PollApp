@@ -1,0 +1,23 @@
+@use 'variables' as *;
+
+.home {
+  min-height: 100vh;
+  background: $bg-dark;
+}
+
+.home__surveys {
+  border-top: 1px solid $border-dark;
+  padding-top: 32px;
+}
+
+.home__section-title {
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.home__loading {
+  color: $text-muted-dark;
+  text-align: center;
+  padding: 48px;
+  font-size: 15px;
+}

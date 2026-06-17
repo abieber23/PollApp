@@ -1,0 +1,40 @@
+// ── Colors ────────────────────────────────────────────
+$bg-dark: #342739;
+$surface-dark: #422f48;
+$surface-dark-hover: #4f3857;
+$accent: #ffb66f;
+$accent-hover: #e8a05a;
+$accent-subtle: rgba(255, 182, 111, 0.15);
+$bg-light: #ffffff;
+$surface-light: #f8f7fa;
+$text-on-dark: #ffffff;
+$text-muted-dark: rgba(255, 255, 255, 0.6);
+$text-on-light: #1a1a2e;
+$text-muted-light: #666677;
+$border-dark: rgba(255, 255, 255, 0.12);
+$border-light: #e4e0f0;
+$success: #4caf50;
+$error: #f44336;
+
+// ── Spacing ───────────────────────────────────────────
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-xxl: 48px;
+
+// ── Border radius ─────────────────────────────────────
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 20px;
+$radius-xl: 28px;
+
+// ── Typography ────────────────────────────────────────
+$font-sans: 'Mulish', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-heading: 'Nerko One', cursive;
+
+// ── Shadows ───────────────────────────────────────────
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.12);
+$shadow-md: 0 4px 20px rgba(0, 0, 0, 0.2);
+$shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.35);

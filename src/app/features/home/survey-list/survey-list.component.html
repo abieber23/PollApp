@@ -1,0 +1,51 @@
+<section class="survey-list">
+  <div class="survey-list__controls">
+    <div class="survey-list__tabs">
+      <button
+        class="survey-list__tab"
+        [class.survey-list__tab--active]="activeTab() === 'active'"
+        (click)="setTab('active')"
+      >
+        Active survey
+      </button>
+      <button
+        class="survey-list__tab"
+        [class.survey-list__tab--active]="activeTab() === 'past'"
+        (click)="setTab('past')"
+      >
+        Past survey
+      </button>
+    </div>
+
+    @if (categories().length > 0) {
+      <select
+        class="survey-list__select"
+        [value]="selectedCategory() ?? ''"
+        (change)="selectedCategory.set($any($event.target).value || null)"
+      >
+        <option value="">Sort by categories</option>
+        @for (cat of categories(); track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+    }
+  </div>
+
+  @if (filteredPolls().length > 0) {
+    <div class="survey-list__grid">
+      @for (poll of filteredPolls(); track poll.id) {
+        <app-survey-card
+          [poll]="poll"
+          variant="list"
+          [showDelete]="true"
+          (cardClick)="pollSelected.emit($event)"
+          (deleteClick)="pollDelete.emit($event)"
+        />
+      }
+    </div>
+  } @else {
+    <p class="survey-list__empty">
+      No {{ activeTab() === 'active' ? 'active' : 'past' }} surveys yet.
+    </p>
+  }
+</section>

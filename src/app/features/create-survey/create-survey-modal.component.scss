@@ -1,0 +1,209 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.modal {
+  background: $surface-dark;
+  border-radius: $radius-xl;
+  width: 100%;
+  max-width: 820px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: $shadow-lg;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 28px 28px 0;
+    gap: 16px;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 800;
+    color: $accent;
+    margin: 8px 0 0;
+    letter-spacing: -0.5px;
+  }
+
+  &__close {
+    @include button-ghost;
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: $radius-sm;
+    flex-shrink: 0;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 24px 28px;
+  }
+
+  // ── Fields ────────────────────────────────────────
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: $text-on-dark;
+  }
+
+  &__required {
+    color: $accent;
+  }
+
+  &__optional {
+    color: $text-muted-dark;
+    font-weight: 400;
+  }
+
+  &__input {
+    @include input-dark;
+
+    &--option {
+      flex: 1;
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+  }
+
+  // ── Questions ─────────────────────────────────────
+  &__question {
+    border: 1px solid $border-dark;
+    border-radius: $radius-md;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  &__question-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  &__answers-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 14px 0 8px;
+  }
+
+  &__option-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  &__option-letter {
+    font-size: 13px;
+    font-weight: 600;
+    color: $text-muted-dark;
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  &__icon-btn {
+    background: transparent;
+    border: none;
+    color: $text-muted-dark;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 4px;
+    line-height: 1;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: $error;
+    }
+  }
+
+  &__checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: $text-muted-dark;
+    cursor: pointer;
+
+    input[type='checkbox'] {
+      accent-color: $accent;
+      cursor: pointer;
+    }
+  }
+
+  &__add-btn {
+    background: transparent;
+    border: none;
+    color: $accent;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__add-question-btn {
+    @include button-ghost;
+    font-size: 13px;
+    padding: 8px 16px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  // ── Footer ────────────────────────────────────────
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 28px 24px;
+    border-top: 1px solid $border-dark;
+  }
+
+  &__publish-btn {
+    @include button-primary;
+    font-size: 15px;
+    padding: 12px 32px;
+    border-radius: $radius-md;
+  }
+
+  &__error {
+    color: $error;
+    font-size: 13px;
+    padding: 0 28px 8px;
+    margin: 0;
+  }
+}
