@@ -34,13 +34,19 @@
           </div>
           <div class="modal__field">
             <label class="modal__label">Choose category</label>
-            <input
-              class="modal__input"
-              type="text"
+            <select
+              class="modal__input modal__select"
               [value]="category()"
-              (input)="category.set($any($event.target).value)"
-              placeholder="e.g. Team activities"
-            />
+              (change)="category.set($any($event.target).value)"
+            >
+              <option value="">Select a category</option>
+              <option value="Team Activities">Team Activities</option>
+              <option value="Health & Wellness">Health &amp; Wellness</option>
+              <option value="Gaming & Entertainment">Gaming &amp; Entertainment</option>
+              <option value="Education & Learning">Education &amp; Learning</option>
+              <option value="Lifestyle & Preferences">Lifestyle &amp; Preferences</option>
+              <option value="Technology & Innovation">Technology &amp; Innovation</option>
+            </select>
           </div>
         </div>
 
@@ -50,7 +56,11 @@
             <div class="modal__question-header">
               <label class="modal__label">{{ i + 1 }}. Question <span class="modal__required">*</span></label>
               @if (questions().length > 1) {
-                <button class="modal__icon-btn" (click)="removeQuestion(i)" title="Remove question">×</button>
+                <button class="modal__icon-btn" (click)="removeQuestion(i)" title="Remove question">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
               }
             </div>
             <input
@@ -83,7 +93,11 @@
                   (input)="setOptionText(i, j, $any($event.target).value)"
                 />
                 @if (question.options.length > 2) {
-                  <button class="modal__icon-btn" (click)="removeOption(i, j)" title="Remove option">×</button>
+                  <button class="modal__icon-btn" (click)="removeOption(i, j)" title="Remove option">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
                 }
               </div>
             }

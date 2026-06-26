@@ -1,16 +1,19 @@
 import { Component, OnDestroy, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 import type { Poll, Vote } from '../../core/models';
 import { PollService } from '../../core/services/poll.service';
 import { BadgeComponent } from '../../shared/components/badge/badge.component';
 import { SurveyResultsComponent } from './survey-results/survey-results.component';
+import { ButtonPrimaryComponent } from '../../shared/components/button-primary/button-primary.component';
+import { CreateSurveyModalComponent } from '../create-survey/create-survey-modal.component';
 
 @Component({
   selector: 'app-survey-detail',
   standalone: true,
-  imports: [RouterLink, BadgeComponent, SurveyResultsComponent],
+  imports: [RouterLink, BadgeComponent, SurveyResultsComponent, ButtonPrimaryComponent, CreateSurveyModalComponent],
   templateUrl: './survey-detail.component.html',
   styleUrl: './survey-detail.component.scss',
 })
@@ -19,8 +22,12 @@ export class SurveyDetailComponent implements OnDestroy {
   private readonly router = inject(Router);
   private readonly pollService = inject(PollService);
   private readonly platformId = inject(PLATFORM_ID);
-  private subscription: RealtimeChannel | null = null;
+  private realtimeSubscription: RealtimeChannel | null = null;
+  private routeSub: Subscription | null = null;
 
+  showCreateModal = signal(false);
+  showToast = signal(false);
+  private pendingPoll = signal<Poll | null>(null);
   poll = signal<Poll | null>(null);
   voteCounts = signal<Record<string, number>>({});
   selectedOptions = signal<Record<string, string[]>>({});
@@ -31,7 +38,11 @@ export class SurveyDetailComponent implements OnDestroy {
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
-      this.init();
+      this.routeSub = this.route.paramMap.subscribe((params) => {
+        const id = params.get('id');
+        if (id) this.init(id);
+        else this.router.navigate(['/']);
+      });
     }
   }
 
@@ -47,12 +58,14 @@ export class SurveyDetailComponent implements OnDestroy {
     );
   }
 
-  private async init(): Promise<void> {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (!id) {
-      this.router.navigate(['/']);
-      return;
-    }
+  private async init(id: string): Promise<void> {
+    this.realtimeSubscription?.unsubscribe();
+    this.poll.set(null);
+    this.voteCounts.set({});
+    this.selectedOptions.set({});
+    this.voted.set(false);
+    this.loading.set(true);
+    this.error.set(null);
     try {
       const [poll, counts] = await Promise.all([
         this.pollService.getPollById(id),
@@ -61,7 +74,7 @@ export class SurveyDetailComponent implements OnDestroy {
       this.poll.set(poll);
       this.voteCounts.set(counts);
 
-      this.subscription = this.pollService.subscribeToVotes(id, (vote: Vote) => {
+      this.realtimeSubscription = this.pollService.subscribeToVotes(id, (vote: Vote) => {
         this.voteCounts.update((c) => ({ ...c, [vote.option_id]: (c[vote.option_id] ?? 0) + 1 }));
       });
     } catch {
@@ -103,6 +116,7 @@ export class SurveyDetailComponent implements OnDestroy {
         }
       }
       this.voted.set(true);
+      setTimeout(() => this.router.navigate(['/']), 2000);
     } catch {
       this.error.set('Failed to submit. Please try again.');
     } finally {
@@ -122,6 +136,23 @@ export class SurveyDetailComponent implements OnDestroy {
     return String.fromCharCode(65 + index);
   }
 
+  onPollCreated(poll: Poll): void {
+    this.pendingPoll.set(poll);
+    this.showToast.set(true);
+    setTimeout(() => {
+      this.showToast.set(false);
+      this.showCreateModal.set(false);
+      this.router.navigate(['/survey', poll.id]);
+    }, 1800);
+  }
+
+  dismissToast(): void {
+    this.showToast.set(false);
+    this.showCreateModal.set(false);
+    const poll = this.pendingPoll();
+    if (poll) this.router.navigate(['/survey', poll.id]);
+  }
+
   async deletePoll(): Promise<void> {
     const poll = this.poll();
     if (!poll) return;
@@ -135,6 +166,7 @@ export class SurveyDetailComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    this.realtimeSubscription?.unsubscribe();
+    this.routeSub?.unsubscribe();
   }
 }

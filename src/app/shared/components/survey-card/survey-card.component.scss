@@ -114,24 +114,42 @@
     }
   }
 
-  // ── List variant (compact, for light pages) ───────
+  // ── List variant (dark, ending-soon shape) ───────
   &--list {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid $border-dark;
-    padding: $space-md $space-lg;
+    background: $surface-dark;
+    border: none;
+    border-radius: 12px 80px 12px 12px;
+    min-height: 160px;
+    justify-content: space-between;
 
     &:hover {
-      box-shadow: $shadow-sm;
-      border-color: rgba($accent, 0.4);
+      transform: translateY(-4px);
+      box-shadow: $shadow-md;
+      background: $surface-dark-hover;
+    }
+
+    .survey-card__delete {
+      top: auto;
+      bottom: 10px;
+      color: $text-muted-dark;
+
+      &:hover {
+        background: rgba($error, 0.2);
+        color: $error;
+      }
     }
 
     .survey-card__category {
-      color: $text-muted-dark;
+      color: $accent;
+      text-transform: none;
+      letter-spacing: 0;
     }
 
     .survey-card__title {
       color: $text-on-dark;
-      font-size: 15px;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.25;
     }
   }
 }

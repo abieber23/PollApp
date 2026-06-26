@@ -83,11 +83,38 @@
   }
 
   &__input {
-    @include input-dark;
+    width: 100%;
+    padding: 12px 18px;
+    background: #ffffff;
+    border: 1.5px solid #e8e0f0;
+    border-radius: 8px 40px 8px 8px;
+    color: $text-on-light;
+    font-size: 14px;
+    font-family: inherit;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &::placeholder {
+      color: #b0a8c0;
+    }
+
+    &:focus {
+      outline: none;
+      background: #fef3e6;
+      border-color: $accent;
+    }
 
     &--option {
       flex: 1;
     }
+  }
+
+  &__select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23b0a8c0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
   }
 
   &__textarea {
@@ -134,17 +161,22 @@
   }
 
   &__icon-btn {
-    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.08);
     border: none;
+    border-radius: $radius-sm;
     color: $text-muted-dark;
     cursor: pointer;
-    font-size: 18px;
-    padding: 0 4px;
-    line-height: 1;
-    transition: color 0.15s ease;
+    transition: background 0.2s ease, color 0.2s ease;
 
     &:hover {
-      color: $error;
+      background: #fef3e6;
+      color: $accent;
     }
   }
 

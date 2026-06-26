@@ -1,15 +1,24 @@
 <div class="survey-detail-page">
   <div class="survey-detail-page__topbar">
-    <a routerLink="/" class="survey-detail-page__back-link">← Back to surveys</a>
-    @if (poll()) {
-      <button class="survey-detail-page__delete-btn" (click)="deletePoll()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Umfrage löschen
-      </button>
-    }
+    <a routerLink="/" class="survey-detail-page__back-link">
+      <img src="img/LOGO_Purple.png" alt="Back to surveys" class="survey-detail-page__back-logo" />
+    </a>
+    <app-button-primary (action)="showCreateModal.set(true)" />
   </div>
+
+  @if (showCreateModal()) {
+    <app-create-survey-modal
+      (closed)="showCreateModal.set(false)"
+      (pollCreated)="onPollCreated($event)"
+    />
+  }
+
+  @if (showToast()) {
+    <div class="survey-detail-page__toast">
+      <span class="survey-detail-page__toast-text">Your survey is now published</span>
+      <button class="survey-detail-page__toast-close" (click)="dismissToast()">×</button>
+    </div>
+  }
 
   @if (loading()) {
     <div class="survey-detail-page__loading">Loading survey…</div>
@@ -20,8 +29,8 @@
       <!-- Left: Questions + Voting -->
       <div class="survey-detail__left">
         <header class="survey-detail__header">
-          <div class="survey-detail__meta">
-            <app-badge [label]="poll()!.status" [variant]="poll()!.status" />
+          <app-badge [label]="poll()!.status" [variant]="poll()!.status" />
+          <div class="survey-detail__meta-row">
             @if (poll()!.deadline) {
               <span class="survey-detail__date">Ends on {{ formatDate(poll()!.deadline!) }}</span>
             }
@@ -35,58 +44,60 @@
           }
         </header>
 
-        @for (question of poll()!.questions ?? []; track question.id; let i = $index) {
-          <div class="survey-detail__question">
-            <h3 class="survey-detail__question-title">
-              {{ i + 1 }}. {{ question.text }}
-            </h3>
-            @if (question.allow_multiple) {
-              <p class="survey-detail__hint">More than one answer is possible.</p>
-            }
-            <ul class="survey-detail__options">
-              @for (option of question.options ?? []; track option.id; let j = $index) {
-                <li
-                  class="survey-detail__option"
-                  [class.survey-detail__option--selected]="isSelected(question.id, option.id)"
-                  [class.survey-detail__option--disabled]="voted() || isPast"
-                  (click)="toggleOption(question.id, option.id, question.allow_multiple)"
-                >
-                  <span class="survey-detail__option-box">
-                    @if (isSelected(question.id, option.id)) {
-                      <span class="survey-detail__option-check">✓</span>
-                    }
-                  </span>
-                  <span class="survey-detail__option-letter">{{ optionLetter(j) }}.</span>
-                  {{ option.label }}
-                </li>
+        <div class="survey-detail__questions-grid">
+          @for (question of poll()!.questions ?? []; track question.id; let i = $index) {
+            <div class="survey-detail__question">
+              <h3 class="survey-detail__question-title">
+                {{ i + 1 }}. {{ question.text }}
+              </h3>
+              @if (question.allow_multiple) {
+                <p class="survey-detail__hint">More than one answers are possible.</p>
               }
-            </ul>
-          </div>
-        }
+              <ul class="survey-detail__options">
+                @for (option of question.options ?? []; track option.id; let j = $index) {
+                  <li
+                    class="survey-detail__option"
+                    [class.survey-detail__option--selected]="isSelected(question.id, option.id)"
+                    [class.survey-detail__option--disabled]="voted() || isPast"
+                    (click)="toggleOption(question.id, option.id, question.allow_multiple)"
+                  >
+                    <span class="survey-detail__option-box">
+                      @if (isSelected(question.id, option.id)) {
+                        <span class="survey-detail__option-check">✓</span>
+                      }
+                    </span>
+                    <span class="survey-detail__option-letter">{{ optionLetter(j) }}.</span>
+                    <span>{{ option.label }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
 
         @if (error()) {
           <p class="survey-detail__error-msg">{{ error() }}</p>
         }
 
-        @if (!voted() && !isPast) {
-          <button
-            class="survey-detail__submit"
-            [disabled]="!canSubmit || submitting()"
-            (click)="submitVotes()"
-          >
-            {{ submitting() ? 'Submitting…' : 'Complete survey' }}
-          </button>
-        }
-
-        @if (voted()) {
-          <div class="survey-detail__success">
-            Thank you! Your vote has been recorded.
-          </div>
-        }
-
-        @if (isPast) {
-          <div class="survey-detail__past-notice">This survey has ended.</div>
-        }
+        <div class="survey-detail__actions">
+          @if (voted()) {
+            <div class="survey-detail__success">
+              Thank you! Your vote has been recorded.
+            </div>
+          }
+          @if (isPast) {
+            <div class="survey-detail__past-notice">This survey has ended.</div>
+          }
+          @if (!voted() && !isPast) {
+            <button
+              class="survey-detail__submit"
+              [disabled]="!canSubmit || submitting()"
+              (click)="submitVotes()"
+            >
+              {{ submitting() ? 'Submitting…' : 'Complete survey' }}
+            </button>
+          }
+        </div>
       </div>
 
       <!-- Right: Live Results -->

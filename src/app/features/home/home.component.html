@@ -30,4 +30,11 @@
       (pollCreated)="onPollCreated($event)"
     />
   }
+
+  @if (showToast()) {
+    <div class="home__toast">
+      <span class="home__toast-text">Your survey is now published</span>
+      <button class="home__toast-close" (click)="dismissToast()">×</button>
+    </div>
+  }
 </div>

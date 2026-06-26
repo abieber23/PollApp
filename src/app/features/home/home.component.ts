@@ -52,9 +52,25 @@ export class HomeComponent {
     this.router.navigate(['/survey', poll.id]);
   }
 
+  showToast = signal(false);
+  private pendingPoll = signal<Poll | null>(null);
+
   onPollCreated(poll: Poll): void {
     this.activePolls.update((polls) => [poll, ...polls]);
+    this.pendingPoll.set(poll);
+    this.showToast.set(true);
+    setTimeout(() => {
+      this.showToast.set(false);
+      this.showCreateModal.set(false);
+      this.router.navigate(['/survey', poll.id]);
+    }, 1800);
+  }
+
+  dismissToast(): void {
+    this.showToast.set(false);
     this.showCreateModal.set(false);
+    const poll = this.pendingPoll();
+    if (poll) this.router.navigate(['/survey', poll.id]);
   }
 
   async deletePoll(pollId: string): Promise<void> {

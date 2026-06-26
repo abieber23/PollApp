@@ -1,7 +1,13 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+:host {
+  display: block;
+  background: $bg-light;
+}
+
 .survey-detail-page {
+  @include container;
   min-height: 100vh;
   background: $bg-light;
   padding: 24px;
@@ -14,14 +20,18 @@
   }
 
   &__back-link {
-    color: $text-muted-light;
+    display: inline-flex;
     text-decoration: none;
-    font-size: 14px;
-    transition: color 0.2s ease;
+    transition: opacity 0.2s ease;
 
     &:hover {
-      color: $text-on-light;
+      opacity: 0.8;
     }
+  }
+
+  &__back-logo {
+    height: 36px;
+    width: auto;
   }
 
   &__delete-btn {
@@ -44,6 +54,51 @@
     }
   }
 
+  &__toast {
+    position: fixed;
+    bottom: 320px;
+    right: calc(50% - 382px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 20px;
+    background: #fef3e6;
+    border-radius: 8px 40px 8px 8px;
+    box-shadow: $shadow-md;
+    min-width: 240px;
+    max-width: 320px;
+    animation: toast-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes toast-in {
+    from { transform: translateX(120%); }
+    to   { transform: translateX(0); }
+  }
+
+  &__toast-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: $text-on-light;
+    line-height: 1.3;
+  }
+
+  &__toast-close {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: $text-muted-light;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $text-on-light;
+    }
+  }
+
   &__loading,
   &__error {
     text-align: center;
@@ -60,17 +115,23 @@
   max-width: 1100px;
   margin: 0 auto;
 
-  // ── Header ────────────────────────────────────────
-  &__header {
-    margin-bottom: 32px;
+  // ── Left panel ────────────────────────────────────
+  &__left {
+    background: $surface-light;
+    border-radius: 0px 80px 0px 0px;
+    padding: 32px;
   }
 
-  &__meta {
+  // ── Header ────────────────────────────────────────
+  &__header {
+    margin-bottom: 28px;
+  }
+
+  &__meta-row {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 16px;
+    justify-content: space-between;
+    margin: 10px 0 14px;
   }
 
   &__date,
@@ -80,12 +141,12 @@
   }
 
   &__title {
-    font-size: 36px;
-    font-weight: 800;
+    font-family: $font-heading;
+    font-size: 38px;
+    font-weight: 400;
     color: $accent;
     margin: 0 0 12px;
-    line-height: 1.15;
-    letter-spacing: -0.5px;
+    line-height: 1.2;
   }
 
   &__description {
@@ -95,22 +156,31 @@
     margin: 0;
   }
 
-  // ── Questions ─────────────────────────────────────
+  // ── Questions grid ────────────────────────────────
+  &__questions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 32px;
+    margin-bottom: 28px;
+  }
+
   &__question {
-    margin-bottom: 32px;
+    display: flex;
+    flex-direction: column;
   }
 
   &__question-title {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
     color: $text-on-light;
-    margin: 0 0 6px;
+    margin: 0 0 4px;
+    line-height: 1.4;
   }
 
   &__hint {
     font-size: 12px;
     color: $text-muted-light;
-    margin: 0 0 12px;
+    margin: 0 0 10px;
     font-style: italic;
   }
 
@@ -121,30 +191,23 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
 
   &__option {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
-    padding: 10px 14px;
-    border: 1.5px solid $border-light;
-    border-radius: $radius-sm;
     cursor: pointer;
     font-size: 14px;
     color: $text-on-light;
-    transition: border-color 0.15s ease, background 0.15s ease;
     user-select: none;
+    line-height: 1.4;
 
     &:hover:not(&--disabled) {
-      border-color: $accent;
-      background: rgba($accent, 0.04);
-    }
-
-    &--selected {
-      border-color: $accent;
-      background: rgba($accent, 0.08);
+      .survey-detail__option-box {
+        border-color: $accent;
+      }
     }
 
     &--disabled {
@@ -156,13 +219,15 @@
   &__option-box {
     width: 18px;
     height: 18px;
-    border: 1.5px solid $border-light;
+    border: 1.5px solid #c8c4d8;
     border-radius: 4px;
     flex-shrink: 0;
+    margin-top: 1px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: $bg-light;
+    transition: border-color 0.15s ease, background 0.15s ease;
 
     .survey-detail__option--selected & {
       border-color: $accent;
@@ -178,23 +243,44 @@
   }
 
   &__option-letter {
-    font-weight: 600;
-    color: $text-muted-light;
-    font-size: 13px;
+    font-weight: 700;
+    color: $text-on-light;
+    font-size: 14px;
+    flex-shrink: 0;
   }
 
   // ── Actions ───────────────────────────────────────
-  &__submit {
-    @include button-primary;
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     margin-top: 8px;
-    font-size: 15px;
-    padding: 12px 28px;
-    border-radius: $radius-md;
+  }
+
+  &__submit {
+    padding: 12px 24px;
+    background: #fef3e6;
+    border: none;
+    border-radius: $radius-sm;
+    color: $text-on-light;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: $font-sans;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: #fde8cf;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
   &__success {
-    margin-top: 16px;
-    padding: 14px 18px;
+    padding: 12px 18px;
     background: rgba($success, 0.1);
     color: $success;
     border-radius: $radius-sm;
@@ -203,8 +289,7 @@
   }
 
   &__past-notice {
-    margin-top: 16px;
-    padding: 14px 18px;
+    padding: 12px 18px;
     background: rgba($text-muted-light, 0.08);
     color: $text-muted-light;
     border-radius: $radius-sm;
@@ -219,10 +304,6 @@
 
   // ── Right panel ───────────────────────────────────
   &__right {
-    padding: 24px;
-    background: $surface-light;
-    border-radius: $radius-lg;
-    border: 1px solid $border-light;
     align-self: start;
     position: sticky;
     top: 24px;

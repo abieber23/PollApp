@@ -17,6 +17,12 @@ export class SurveyListComponent {
 
   activeTab = signal<'active' | 'past'>('active');
   selectedCategory = signal<string | null>(null);
+  dropdownOpen = signal(false);
+
+  selectCategory(cat: string | null): void {
+    this.selectedCategory.set(cat);
+    this.dropdownOpen.set(false);
+  }
 
   currentPolls = computed(() =>
     this.activeTab() === 'active' ? this.activePolls() : this.pastPolls(),

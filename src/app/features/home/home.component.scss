@@ -1,12 +1,13 @@
 @use 'variables' as *;
+@use 'mixins' as *;
 
 .home {
   min-height: 100vh;
   background: $bg-dark;
+  @include container;
 }
 
 .home__surveys {
-  border-top: 1px solid $border-dark;
   padding-top: 32px;
 }
 
@@ -20,4 +21,49 @@
   text-align: center;
   padding: 48px;
   font-size: 15px;
+}
+
+.home__toast {
+  position: fixed;
+  bottom: 320px;
+  right: calc(50% - 382px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 20px;
+  background: #fef3e6;
+  border-radius: 8px 40px 8px 8px;
+  box-shadow: $shadow-md;
+  min-width: 240px;
+  max-width: 320px;
+  animation: toast-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes toast-in {
+  from { transform: translateX(120%); }
+  to   { transform: translateX(0); }
+}
+
+.home__toast-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: $text-on-light;
+  line-height: 1.3;
+}
+
+.home__toast-close {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: $text-muted-light;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+
+  &:hover {
+    color: $text-on-light;
+  }
 }

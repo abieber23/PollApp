@@ -9,11 +9,11 @@
   gap: 32px;
 
   &__content {
-    max-width: 440px;
+    max-width: 580px;
   }
 
   &__title {
-    font-size: 48px;
+    font-size: 80px;
     font-weight: 800;
     color: $accent;
     line-height: 1.05;
@@ -22,7 +22,7 @@
   }
 
   &__subtitle {
-    font-size: 14px;
+    font-size: 20px;
     color: $text-muted-dark;
     line-height: 1.65;
     margin: 0 0 28px;

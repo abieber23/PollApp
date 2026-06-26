@@ -18,16 +18,43 @@
     </div>
 
     @if (categories().length > 0) {
-      <select
-        class="survey-list__select"
-        [value]="selectedCategory() ?? ''"
-        (change)="selectedCategory.set($any($event.target).value || null)"
-      >
-        <option value="">Sort by categories</option>
-        @for (cat of categories(); track cat) {
-          <option [value]="cat">{{ cat }}</option>
+      <div class="survey-list__dropdown">
+        @if (dropdownOpen()) {
+          <div class="survey-list__backdrop" (click)="dropdownOpen.set(false)"></div>
         }
-      </select>
+        <button
+          class="survey-list__dropdown-trigger"
+          (click)="dropdownOpen.set(!dropdownOpen())"
+        >
+          <span>Sort by categories</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        @if (selectedCategory()) {
+          <span class="survey-list__dropdown-active">{{ selectedCategory() }}</span>
+        }
+        @if (dropdownOpen()) {
+          <div class="survey-list__dropdown-menu">
+            <button
+              class="survey-list__dropdown-item"
+              [class.survey-list__dropdown-item--reset]="true"
+              (click)="selectCategory(null)"
+            >
+              Kein Filter
+            </button>
+            @for (cat of categories(); track cat) {
+              <button
+                class="survey-list__dropdown-item"
+                [class.survey-list__dropdown-item--active]="selectedCategory() === cat"
+                (click)="selectCategory(cat)"
+              >
+                {{ cat }}
+              </button>
+            }
+          </div>
+        }
+      </div>
     }
   </div>
 
