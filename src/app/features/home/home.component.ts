@@ -27,12 +27,14 @@ export class HomeComponent {
   showCreateModal = signal(false);
   loading = signal(true);
 
+  /** - Triggers poll loading in the browser on init */
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.loadPolls();
     }
   }
 
+  /** - Loads active, past, and ending-soon polls in parallel */
   private async loadPolls(): Promise<void> {
     try {
       const [active, past, ending] = await Promise.all([
@@ -48,6 +50,7 @@ export class HomeComponent {
     }
   }
 
+  /** - Navigates to the detail page of the given poll */
   navigateToPoll(poll: Poll): void {
     this.router.navigate(['/survey', poll.id]);
   }
@@ -55,6 +58,10 @@ export class HomeComponent {
   showToast = signal(false);
   private pendingPoll = signal<Poll | null>(null);
 
+  /**
+   * - Prepends the new poll to the active list and shows a toast
+   * - Navigates to the poll detail page after 1.8 s
+   */
   onPollCreated(poll: Poll): void {
     this.activePolls.update((polls) => [poll, ...polls]);
     this.pendingPoll.set(poll);
@@ -66,6 +73,7 @@ export class HomeComponent {
     }, 1800);
   }
 
+  /** - Closes the toast and navigates to the pending poll */
   dismissToast(): void {
     this.showToast.set(false);
     this.showCreateModal.set(false);
@@ -73,6 +81,10 @@ export class HomeComponent {
     if (poll) this.router.navigate(['/survey', poll.id]);
   }
 
+  /**
+   * - Deletes a poll after user confirmation
+   * - Removes it from all local poll lists on success
+   */
   async deletePoll(pollId: string): Promise<void> {
     if (!confirm('Umfrage wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
     try {

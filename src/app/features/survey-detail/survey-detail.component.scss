@@ -43,7 +43,7 @@
     border: 1px solid rgba($error, 0.3);
     border-radius: $radius-sm;
     color: $error;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s ease, border-color 0.2s ease;
@@ -78,7 +78,7 @@
   }
 
   &__toast-text {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     color: $text-on-light;
     line-height: 1.3;
@@ -104,7 +104,7 @@
     text-align: center;
     padding: 80px 24px;
     color: $text-muted-light;
-    font-size: 15px;
+    font-size: 16px;
   }
 }
 
@@ -136,7 +136,7 @@
 
   &__date,
   &__category {
-    font-size: 13px;
+    font-size: 16px;
     color: $text-muted-light;
   }
 
@@ -150,7 +150,7 @@
   }
 
   &__description {
-    font-size: 14px;
+    font-size: 16px;
     color: $text-muted-light;
     line-height: 1.6;
     margin: 0;
@@ -170,7 +170,7 @@
   }
 
   &__question-title {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
     color: $text-on-light;
     margin: 0 0 4px;
@@ -178,7 +178,7 @@
   }
 
   &__hint {
-    font-size: 12px;
+    font-size: 16px;
     color: $text-muted-light;
     margin: 0 0 10px;
     font-style: italic;
@@ -199,7 +199,7 @@
     align-items: flex-start;
     gap: 10px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
     color: $text-on-light;
     user-select: none;
     line-height: 1.4;
@@ -237,7 +237,7 @@
 
   &__option-check {
     color: #1a1a2e;
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 700;
     line-height: 1;
   }
@@ -245,7 +245,7 @@
   &__option-letter {
     font-weight: 700;
     color: $text-on-light;
-    font-size: 14px;
+    font-size: 16px;
     flex-shrink: 0;
   }
 
@@ -263,7 +263,7 @@
     border: none;
     border-radius: $radius-sm;
     color: $text-on-light;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
     font-family: $font-sans;
     cursor: pointer;
@@ -284,7 +284,7 @@
     background: rgba($success, 0.1);
     color: $success;
     border-radius: $radius-sm;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
   }
 
@@ -293,12 +293,12 @@
     background: rgba($text-muted-light, 0.08);
     color: $text-muted-light;
     border-radius: $radius-sm;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   &__error-msg {
     color: $error;
-    font-size: 13px;
+    font-size: 16px;
     margin: 8px 0;
   }
 

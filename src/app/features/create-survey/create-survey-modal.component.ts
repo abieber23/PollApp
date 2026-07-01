@@ -31,6 +31,7 @@ export class CreateSurveyModalComponent {
   submitting = signal(false);
   error = signal<string | null>(null);
 
+  /** - Returns true when title and at least 2 options per question are filled */
   get isValid(): boolean {
     if (!this.title().trim()) return false;
     return this.questions().every(
@@ -38,20 +39,24 @@ export class CreateSurveyModalComponent {
     );
   }
 
+  /** - Appends a new empty question with two blank options */
   addQuestion(): void {
     this.questions.update((qs) => [...qs, { text: '', allow_multiple: false, options: ['', ''] }]);
   }
 
+  /** - Removes the question at the given index */
   removeQuestion(index: number): void {
     this.questions.update((qs) => qs.filter((_, i) => i !== index));
   }
 
+  /** - Appends a blank option to the question at qIndex */
   addOption(qIndex: number): void {
     this.questions.update((qs) =>
       qs.map((q, i) => (i === qIndex ? { ...q, options: [...q.options, ''] } : q)),
     );
   }
 
+  /** - Removes the option at oIndex from the question at qIndex */
   removeOption(qIndex: number, oIndex: number): void {
     this.questions.update((qs) =>
       qs.map((q, i) =>
@@ -60,10 +65,12 @@ export class CreateSurveyModalComponent {
     );
   }
 
+  /** - Updates the text of the question at the given index */
   setQuestionText(index: number, text: string): void {
     this.questions.update((qs) => qs.map((q, i) => (i === index ? { ...q, text } : q)));
   }
 
+  /** - Updates the text of a specific option within a question */
   setOptionText(qIndex: number, oIndex: number, text: string): void {
     this.questions.update((qs) =>
       qs.map((q, i) =>
@@ -74,16 +81,22 @@ export class CreateSurveyModalComponent {
     );
   }
 
+  /** - Toggles the allow_multiple flag of the question at the given index */
   toggleMultiple(index: number): void {
     this.questions.update((qs) =>
       qs.map((q, i) => (i === index ? { ...q, allow_multiple: !q.allow_multiple } : q)),
     );
   }
 
+  /** - Converts a zero-based index to a letter (0 → A) */
   optionLetter(index: number): string {
     return String.fromCharCode(65 + index);
   }
 
+  /**
+   * - Validates and publishes the survey via PollService
+   * - Emits pollCreated on success, sets error signal on failure
+   */
   async publish(): Promise<void> {
     if (!this.isValid || this.submitting()) return;
     console.log('[publish] questions signal:', JSON.stringify(this.questions()));

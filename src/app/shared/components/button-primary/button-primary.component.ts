@@ -14,6 +14,10 @@ export class ButtonPrimaryComponent {
 
   state = signal<ButtonState>('normal');
 
+  /**
+   * - Prevents double-click while in success state
+   * - Emits action, sets success state, resets after 1.8 s
+   */
   onClick(): void {
     if (this.state() === 'success') return;
     this.state.set('success');

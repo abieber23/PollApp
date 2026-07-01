@@ -19,15 +19,18 @@ export class SurveyListComponent {
   selectedCategory = signal<string | null>(null);
   dropdownOpen = signal(false);
 
+  /** - Sets the active category filter and closes the dropdown */
   selectCategory(cat: string | null): void {
     this.selectedCategory.set(cat);
     this.dropdownOpen.set(false);
   }
 
+  /** - Returns polls for the active tab (active or past) */
   currentPolls = computed(() =>
     this.activeTab() === 'active' ? this.activePolls() : this.pastPolls(),
   );
 
+  /** - Returns a deduplicated list of categories for the current poll list */
   categories = computed(() => {
     const all = this.currentPolls()
       .map((p) => p.category)
@@ -35,11 +38,13 @@ export class SurveyListComponent {
     return [...new Set(all)];
   });
 
+  /** - Filters the current poll list by the selected category */
   filteredPolls = computed(() => {
     const cat = this.selectedCategory();
     return cat ? this.currentPolls().filter((p) => p.category === cat) : this.currentPolls();
   });
 
+  /** - Switches the active tab and resets the category filter */
   setTab(tab: 'active' | 'past'): void {
     this.activeTab.set(tab);
     this.selectedCategory.set(null);

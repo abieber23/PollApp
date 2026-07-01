@@ -4,7 +4,7 @@
   display: inline-block;
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
   white-space: nowrap;
@@ -22,14 +22,14 @@
   &--ending-soon {
     background: $accent;
     color: $text-on-light;
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 600;
   }
 
   &--category {
     background: rgba(255, 255, 255, 0.1);
     color: $text-muted-dark;
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 500;
   }
 

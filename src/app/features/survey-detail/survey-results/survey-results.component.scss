@@ -12,7 +12,7 @@
   }
 
   &__live {
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 700;
     color: $error;
     background: rgba($error, 0.1);
@@ -30,7 +30,7 @@
   }
 
   &__question-title {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
     color: $text-on-light;
     margin: 0 0 12px;
@@ -51,13 +51,13 @@
   }
 
   &__letter {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     color: $text-muted-light;
   }
 
   &__pct {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     color: $text-on-light;
     text-align: right;
