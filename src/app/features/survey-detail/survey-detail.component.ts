@@ -24,6 +24,7 @@ export class SurveyDetailComponent implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private realtimeSubscription: RealtimeChannel | null = null;
   private routeSub: Subscription | null = null;
+  private readonly votedPollsStorageKey = 'pollapp_voted_polls';
 
   showCreateModal = signal(false);
   showToast = signal(false);
@@ -83,9 +84,36 @@ export class SurveyDetailComponent implements OnDestroy {
     ]);
     this.poll.set(poll);
     this.voteCounts.set(counts);
+    if (poll && this.hasAlreadyVoted(poll.id)) {
+      this.voted.set(true);
+    }
     this.realtimeSubscription = this.pollService.subscribeToVotes(id, (vote: Vote) => {
       this.voteCounts.update((c) => ({ ...c, [vote.option_id]: (c[vote.option_id] ?? 0) + 1 }));
     });
+  }
+
+  /** - Reads the list of poll IDs the user has already voted on from localStorage */
+  private getVotedPollIds(): string[] {
+    if (!isPlatformBrowser(this.platformId)) return [];
+    try {
+      return JSON.parse(localStorage.getItem(this.votedPollsStorageKey) ?? '[]');
+    } catch {
+      return [];
+    }
+  }
+
+  /** - Returns true when this browser has already recorded a vote for the given poll */
+  private hasAlreadyVoted(pollId: string): boolean {
+    return this.getVotedPollIds().includes(pollId);
+  }
+
+  /** - Persists the given poll ID as voted in localStorage */
+  private markPollAsVoted(pollId: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const ids = this.getVotedPollIds();
+    if (!ids.includes(pollId)) {
+      localStorage.setItem(this.votedPollsStorageKey, JSON.stringify([...ids, pollId]));
+    }
   }
 
   /**
@@ -142,8 +170,10 @@ export class SurveyDetailComponent implements OnDestroy {
     }
   }
 
-  /** - Sets the voted signal and navigates home after 2 s */
+  /** - Sets the voted signal, persists it to localStorage, and navigates home after 2 s */
   private onVoteSuccess(): void {
+    const poll = this.poll();
+    if (poll) this.markPollAsVoted(poll.id);
     this.voted.set(true);
     setTimeout(() => this.router.navigate(['/']), 2000);
   }
