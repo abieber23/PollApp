@@ -1,4 +1,4 @@
-<div class="modal-overlay" (click)="closed.emit()">
+<div class="modal-overlay" (mousedown)="onOverlayMouseDown($event)" (click)="onOverlayClick()">
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal__header">
       <div>
@@ -12,7 +12,14 @@
       <!-- Left column -->
       <div class="modal__left">
         <div class="modal__field">
-          <label class="modal__label">Survey name <span class="modal__required">*</span></label>
+          <div class="modal__field-header">
+            <label class="modal__label">Survey name <span class="modal__required">*</span></label>
+            <button class="modal__icon-btn" (click)="clearTitle()" title="Clear survey name">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
           <input
             class="modal__input"
             type="text"
@@ -25,14 +32,21 @@
         <div class="modal__row">
           <div class="modal__field">
             <label class="modal__label">Set end date <span class="modal__optional">(optional)</span></label>
-            <input
-              class="modal__input"
-              type="date"
-              [min]="minDate"
-              [max]="maxDate"
-              [value]="deadline()"
-              (input)="deadline.set($any($event.target).value)"
-            />
+            <div class="modal__input-row">
+              <input
+                class="modal__input modal__input--option"
+                type="date"
+                [min]="minDate"
+                [max]="maxDate"
+                [value]="deadline()"
+                (input)="deadline.set($any($event.target).value)"
+              />
+              <button class="modal__icon-btn" (click)="clearDeadline()" title="Clear end date">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
             @if (isDeadlineInvalid) {
               <p class="modal__field-error">Date Invalid</p>
             }
@@ -59,7 +73,14 @@
       <!-- Right column -->
       <div class="modal__right">
         <div class="modal__field">
-          <label class="modal__label">Describing text <span class="modal__optional">(optional)</span></label>
+          <div class="modal__field-header">
+            <label class="modal__label">Describing text <span class="modal__optional">(optional)</span></label>
+            <button class="modal__icon-btn" (click)="clearDescription()" title="Clear describing text">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
           <textarea
             class="modal__input modal__textarea"
             [value]="description()"
@@ -77,13 +98,15 @@
         <div class="modal__question">
           <div class="modal__question-header">
             <label class="modal__label">{{ i + 1 }}. Question <span class="modal__required">*</span></label>
-            @if (questions().length > 1) {
-              <button class="modal__icon-btn" (click)="removeQuestion(i)" title="Remove question">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-            }
+            <button
+              class="modal__icon-btn"
+              (click)="onDeleteQuestionClick(i)"
+              [title]="i === 0 ? 'Clear question' : 'Remove question'"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
           </div>
           <input
             class="modal__input"
@@ -114,13 +137,15 @@
                 [value]="option"
                 (input)="setOptionText(i, j, $any($event.target).value)"
               />
-              @if (question.options.length > 2) {
-                <button class="modal__icon-btn" (click)="removeOption(i, j)" title="Remove option">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-              }
+              <button
+                class="modal__icon-btn"
+                (click)="onDeleteOptionClick(i, j)"
+                [title]="j < 2 ? 'Clear option' : 'Remove option'"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
             </div>
           }
 

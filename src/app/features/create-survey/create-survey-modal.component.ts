@@ -23,6 +23,25 @@ export class CreateSurveyModalComponent {
   closed = output<void>();
   pollCreated = output<Poll>();
 
+  private pressStartedInsideModal = false;
+
+  /**
+   * - Records whether the press that started this interaction began inside the modal card
+   * - Based purely on the mousedown origin, so a text-selection drag that ends outside the
+   *   modal is never mistaken for a backdrop click (independent of where the click event
+   *   itself ends up resolving to)
+   */
+  onOverlayMouseDown(event: MouseEvent): void {
+    this.pressStartedInsideModal = !!(event.target as HTMLElement).closest('.modal');
+  }
+
+  /** - Closes the modal only when the interaction both started and ended on the backdrop */
+  onOverlayClick(): void {
+    if (!this.pressStartedInsideModal) {
+      this.closed.emit();
+    }
+  }
+
   title = signal('');
   description = signal('');
   deadline = signal('');
@@ -51,6 +70,21 @@ export class CreateSurveyModalComponent {
     );
   }
 
+  /** - Clears the survey name field */
+  clearTitle(): void {
+    this.title.set('');
+  }
+
+  /** - Clears the describing text field */
+  clearDescription(): void {
+    this.description.set('');
+  }
+
+  /** - Clears the end date field (it's optional, so this just removes the selection) */
+  clearDeadline(): void {
+    this.deadline.set('');
+  }
+
   /** - Appends a new empty question with two blank options */
   addQuestion(): void {
     this.questions.update((qs) => [...qs, { text: '', allow_multiple: false, options: ['', ''] }]);
@@ -59,6 +93,25 @@ export class CreateSurveyModalComponent {
   /** - Removes the question at the given index */
   removeQuestion(index: number): void {
     this.questions.update((qs) => qs.filter((_, i) => i !== index));
+  }
+
+  /** - Blanks out a question's text and all of its option texts, keeping the same fields in place */
+  private clearQuestionFields(index: number): void {
+    this.questions.update((qs) =>
+      qs.map((q, i) => (i === index ? { ...q, text: '', options: q.options.map(() => '') } : q)),
+    );
+  }
+
+  /**
+   * - The survey must always keep at least one question, so question 1 can only be cleared, never removed
+   * - Every other question is removed entirely
+   */
+  onDeleteQuestionClick(index: number): void {
+    if (index === 0) {
+      this.clearQuestionFields(index);
+    } else {
+      this.removeQuestion(index);
+    }
   }
 
   /** - Appends a blank option to the question at qIndex */
@@ -75,6 +128,30 @@ export class CreateSurveyModalComponent {
         i === qIndex ? { ...q, options: q.options.filter((_, j) => j !== oIndex) } : q,
       ),
     );
+  }
+
+  /** - Blanks the text of the option at oIndex, keeping the field in place */
+  private clearOptionText(qIndex: number, oIndex: number): void {
+    this.questions.update((qs) =>
+      qs.map((q, i) =>
+        i === qIndex
+          ? { ...q, options: q.options.map((o, j) => (j === oIndex ? '' : o)) }
+          : q,
+      ),
+    );
+  }
+
+  /**
+   * - A question must always keep at least its first 2 answer options, so those are only
+   *   ever cleared, never removed
+   * - The 3rd option and any further one are removed entirely
+   */
+  onDeleteOptionClick(qIndex: number, oIndex: number): void {
+    if (oIndex < 2) {
+      this.clearOptionText(qIndex, oIndex);
+    } else {
+      this.removeOption(qIndex, oIndex);
+    }
   }
 
   /** - Updates the text of the question at the given index */
