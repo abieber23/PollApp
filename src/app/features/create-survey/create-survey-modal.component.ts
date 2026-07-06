@@ -1,4 +1,5 @@
 import { Component, inject, output, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import type { Poll } from '../../core/models';
 import { PollService } from '../../core/services/poll.service';
@@ -13,7 +14,7 @@ interface QuestionForm {
 @Component({
   selector: 'app-create-survey-modal',
   standalone: true,
-  imports: [FormsModule, BadgeComponent],
+  imports: [FormsModule, BadgeComponent, NgTemplateOutlet],
   templateUrl: './create-survey-modal.component.html',
   styleUrl: './create-survey-modal.component.scss',
 })
@@ -31,9 +32,21 @@ export class CreateSurveyModalComponent {
   submitting = signal(false);
   error = signal<string | null>(null);
 
+  /** - Today's date as yyyy-MM-dd, used as the min attribute for the deadline input */
+  readonly minDate = new Date().toISOString().slice(0, 10);
+
+  /** - Latest selectable date, used as the max attribute for the deadline input */
+  readonly maxDate = '2100-12-31';
+
+  /** - Returns true when a deadline is set and is before today or after maxDate */
+  get isDeadlineInvalid(): boolean {
+    return !!this.deadline() && (this.deadline() < this.minDate || this.deadline() > this.maxDate);
+  }
+
   /** - Returns true when title and at least 2 options per question are filled */
   get isValid(): boolean {
     if (!this.title().trim()) return false;
+    if (this.isDeadlineInvalid) return false;
     return this.questions().every(
       (q) => q.text.trim() && q.options.filter((o) => o.trim()).length >= 2,
     );

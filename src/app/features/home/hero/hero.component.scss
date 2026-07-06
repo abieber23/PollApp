@@ -85,4 +85,32 @@
     top: 2%;
     width: 18%;
   }
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__content {
+      display: contents;
+    }
+
+    &__title {
+      order: 1;
+    }
+
+    &__animation {
+      order: 2;
+      align-self: center;
+      margin: 8px 0;
+    }
+
+    &__subtitle {
+      order: 3;
+    }
+
+    app-button-primary {
+      order: 4;
+      align-self: center;
+    }
+  }
 }

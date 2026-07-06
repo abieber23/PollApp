@@ -31,7 +31,7 @@
   }
 
   &__title {
-    font-size: 28px;
+    font-size: 56px;
     font-weight: 800;
     color: $accent;
     margin: 8px 0 0;
@@ -209,6 +209,10 @@
     }
   }
 
+  &__add-question-wrap {
+    padding: 0 28px 24px;
+  }
+
   &__add-question-btn {
     @include button-ghost;
     font-size: 16px;
@@ -237,5 +241,35 @@
     font-size: 16px;
     padding: 0 28px 8px;
     margin: 0;
+  }
+
+  &__field-error {
+    color: $error;
+    font-size: 13px;
+    margin: 2px 0 0;
+  }
+
+  @media (max-width: 830px) {
+    &__body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__left,
+    &__right {
+      display: contents;
+    }
+
+    &__row {
+      grid-template-columns: 1fr;
+    }
+
+    &__right > &__field {
+      order: 2;
+    }
+
+    &__footer {
+      justify-content: center;
+    }
   }
 }
