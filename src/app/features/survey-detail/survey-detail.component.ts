@@ -1,4 +1,4 @@
-import { Component, OnDestroy, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Component, OnDestroy, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -36,6 +36,23 @@ export class SurveyDetailComponent implements OnDestroy {
   loading = signal(true);
   submitting = signal(false);
   error = signal<string | null>(null);
+
+  /**
+   * - Overlays the current (unsaved) selections on top of the real vote counts
+   * - Gives instant live-result feedback while ticking a box, without touching the database
+   * - Once the vote is actually submitted, the real counts (via Realtime) take over
+   */
+  displayVoteCounts = computed(() => {
+    const base = this.voteCounts();
+    if (this.voted()) return base;
+    const overlay = { ...base };
+    for (const optionIds of Object.values(this.selectedOptions())) {
+      for (const optionId of optionIds) {
+        overlay[optionId] = (overlay[optionId] ?? 0) + 1;
+      }
+    }
+    return overlay;
+  });
 
   /** - Subscribes to route param changes and triggers poll loading */
   constructor() {

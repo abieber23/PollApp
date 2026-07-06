@@ -1,5 +1,4 @@
 import { Component, inject, output, signal } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import type { Poll } from '../../core/models';
 import { PollService } from '../../core/services/poll.service';
@@ -14,7 +13,7 @@ interface QuestionForm {
 @Component({
   selector: 'app-create-survey-modal',
   standalone: true,
-  imports: [FormsModule, BadgeComponent, NgTemplateOutlet],
+  imports: [FormsModule, BadgeComponent],
   templateUrl: './create-survey-modal.component.html',
   styleUrl: './create-survey-modal.component.scss',
 })

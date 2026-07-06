@@ -54,13 +54,6 @@
             </select>
           </div>
         </div>
-
-        <!-- Questions in this column (even index: 1st, 3rd, 5th…) -->
-        @for (question of questions(); track $index; let i = $index) {
-          @if (i % 2 === 0) {
-            <ng-container *ngTemplateOutlet="questionTpl; context: { $implicit: question, i: i }" />
-          }
-        }
       </div>
 
       <!-- Right column -->
@@ -75,14 +68,65 @@
             rows="6"
           ></textarea>
         </div>
-
-        <!-- Questions in this column (odd index: 2nd, 4th, 6th…) -->
-        @for (question of questions(); track $index; let i = $index) {
-          @if (i % 2 !== 0) {
-            <ng-container *ngTemplateOutlet="questionTpl; context: { $implicit: question, i: i }" />
-          }
-        }
       </div>
+    </div>
+
+    <!-- Questions: single grid so each pair lines up in the same row -->
+    <div class="modal__questions-grid">
+      @for (question of questions(); track $index; let i = $index) {
+        <div class="modal__question">
+          <div class="modal__question-header">
+            <label class="modal__label">{{ i + 1 }}. Question <span class="modal__required">*</span></label>
+            @if (questions().length > 1) {
+              <button class="modal__icon-btn" (click)="removeQuestion(i)" title="Remove question">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            }
+          </div>
+          <input
+            class="modal__input"
+            type="text"
+            [value]="question.text"
+            (input)="setQuestionText(i, $any($event.target).value)"
+            placeholder="Which date would work best for you?"
+          />
+
+          <div class="modal__answers-header">
+            <span class="modal__label">Answers</span>
+            <label class="modal__checkbox-label">
+              <input
+                type="checkbox"
+                [checked]="question.allow_multiple"
+                (change)="toggleMultiple(i)"
+              />
+              Allow multiple answers
+            </label>
+          </div>
+
+          @for (option of question.options; track $index; let j = $index) {
+            <div class="modal__option-row">
+              <span class="modal__option-letter">{{ optionLetter(j) }}.</span>
+              <input
+                class="modal__input modal__input--option"
+                type="text"
+                [value]="option"
+                (input)="setOptionText(i, j, $any($event.target).value)"
+              />
+              @if (question.options.length > 2) {
+                <button class="modal__icon-btn" (click)="removeOption(i, j)" title="Remove option">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              }
+            </div>
+          }
+
+          <button class="modal__add-btn" (click)="addOption(i)">+ Add answer</button>
+        </div>
+      }
     </div>
 
     <div class="modal__add-question-wrap">
@@ -90,61 +134,6 @@
         Add next question ⊕
       </button>
     </div>
-
-    <ng-template #questionTpl let-question let-i="i">
-      <div class="modal__question" [style.order]="i + 3">
-        <div class="modal__question-header">
-          <label class="modal__label">{{ i + 1 }}. Question <span class="modal__required">*</span></label>
-          @if (questions().length > 1) {
-            <button class="modal__icon-btn" (click)="removeQuestion(i)" title="Remove question">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          }
-        </div>
-        <input
-          class="modal__input"
-          type="text"
-          [value]="question.text"
-          (input)="setQuestionText(i, $any($event.target).value)"
-          placeholder="Which date would work best for you?"
-        />
-
-        <div class="modal__answers-header">
-          <span class="modal__label">Answers</span>
-          <label class="modal__checkbox-label">
-            <input
-              type="checkbox"
-              [checked]="question.allow_multiple"
-              (change)="toggleMultiple(i)"
-            />
-            Allow multiple answers
-          </label>
-        </div>
-
-        @for (option of question.options; track $index; let j = $index) {
-          <div class="modal__option-row">
-            <span class="modal__option-letter">{{ optionLetter(j) }}.</span>
-            <input
-              class="modal__input modal__input--option"
-              type="text"
-              [value]="option"
-              (input)="setOptionText(i, j, $any($event.target).value)"
-            />
-            @if (question.options.length > 2) {
-              <button class="modal__icon-btn" (click)="removeOption(i, j)" title="Remove option">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-            }
-          </div>
-        }
-
-        <button class="modal__add-btn" (click)="addOption(i)">+ Add answer</button>
-      </div>
-    </ng-template>
 
     @if (error()) {
       <p class="modal__error">{{ error() }}</p>

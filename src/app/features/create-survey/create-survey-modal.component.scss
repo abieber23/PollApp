@@ -17,7 +17,7 @@
   background: $surface-dark;
   border-radius: $radius-xl;
   width: 100%;
-  max-width: 820px;
+  max-width: 1000px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: $shadow-lg;
@@ -124,11 +124,18 @@
   }
 
   // ── Questions ─────────────────────────────────────
+  &__questions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 24px;
+    padding: 0 28px 24px;
+  }
+
   &__question {
     border: 1px solid $border-dark;
     border-radius: $radius-md;
     padding: 16px;
-    margin-bottom: 16px;
   }
 
   &__question-header {
@@ -266,6 +273,10 @@
 
     &__right > &__field {
       order: 2;
+    }
+
+    &__questions-grid {
+      grid-template-columns: 1fr;
     }
 
     &__footer {
